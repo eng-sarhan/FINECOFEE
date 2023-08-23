@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}| My Orders {% endblock %}
+
+{% block content %}
+
+    <div class="my-content container p-5 my-5 rounded border border-warning">
+        <h2 class="text-center">My Orders</h2>
+        <hr>
+        {% if not request.user.is_authenticated and  request.user.is_anonymous %}
+        <h4 class="alert alert-danger">
+            You must be
+            <a class="text-dark" href="{% url 'signin' %}"> Logged In </a>
+        </h4>
+        {% elif all_orders %}
+
+                    {% if all_orders.count > 0 %}
+                    <h4 class="alert alert-danger">
+                    You already have {{ order.count }} Orders
+                    </h4>
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th scope="col">Order Number</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">No. of Items</th>
+                          <th scope="col">Total</th>
+                          <th scope="col">Is Finished</th>
+                        </tr>
+                      </thead>
+                     <tbody>
+                    {%  endif %}
+                    {% for order in all_orders %}
+                      </tr>
+                          <td >{{ order.id}}</td>
+                          <td >{{ order.order_date}}</td>
+                          <td >{{ order.items_count }}</td>
+                          <td >${{ order.total|floatformat:2}}</td>
+                          <td >
+                            {% if order.is_finished == True %}
+                             Yes
+                            {% else %}
+                             No
+                            {% endif %}
+
+                          </td>
+                      </tr>
+                    {%  endfor %}
+                     </tbody>
+                    </table>
+        {% else %}
+        <h4 class="alert alert-warning">
+             Your cart is empty,Please go to
+            <a class="dropdown-item"  href="{% url 'products:products' %}">All Products</a>
+        </h4>
+        {% endif %}
+    </div>
+{% endblock %}
